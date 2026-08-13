@@ -1,0 +1,82 @@
+2026-02-07 23:55:23 | DEBUG    | CIA-Guardian | GuardianEngine initialized
+2026-02-07 23:55:23 | DEBUG    | CIA-Guardian | Executing CMD: net session 2>&1
+2026-02-07 23:55:23 | [33mWARNING[0m | CIA-Guardian | Access Denied for command: net session 2>&1
+2026-02-07 23:55:23 | DEBUG    | CIA-Guardian | Executing CMD: ver
+2026-02-07 23:55:23 | [32mINFO[0m | CIA-Guardian | Hostname: DESKTOP-BUCUD55
+2026-02-07 23:55:23 | [32mINFO[0m | CIA-Guardian | OS: Windows 10.0.22631
+2026-02-07 23:55:23 | [32mINFO[0m | CIA-Guardian | User: DESKTOP-BUCUD55\Razmy
+2026-02-07 23:55:23 | [32mINFO[0m | CIA-Guardian | Administrator: No
+2026-02-07 23:55:23 | [33mWARNING[0m | CIA-Guardian | [33m[!][0m Running without administrator privileges - some checks may fail
+2026-02-07 23:55:23 | [32mINFO[0m | CIA-Guardian | [34m[*][0m Mode: DRY RUN (Audit Only)
+2026-02-07 23:55:23 | [32mINFO[0m | CIA-Guardian | [CONF-01] Starting audit: BitLocker Encryption
+2026-02-07 23:55:23 | DEBUG    | CIA-Guardian | Executing CMD: manage-bde -status C:
+2026-02-07 23:55:29 | [31mERROR[0m | CIA-Guardian | [CONF-01] Audit failed: 
+2026-02-07 23:55:29 | [32mINFO[0m | CIA-Guardian | [CONF-01] BitLocker Encryption: Error - Failed to query BitLocker status
+2026-02-07 23:55:29 | [32mINFO[0m | CIA-Guardian | [CONF-02] Starting audit: SMB1 Protocol Disabled
+2026-02-07 23:55:29 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-WindowsOptionalFeature -Online -FeatureName SMB1Protocol | Select-Object -ExpandProperty State
+2026-02-07 23:55:29 | [32mINFO[0m | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-07 23:55:29 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-WindowsOptionalFeature -Online -FeatureName SMB1Protocol | Select-Object -ExpandProperty State
+2026-02-07 23:55:33 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-SmbServerConfiguration | Select-Object -ExpandProperty EnableSMB1Protocol
+2026-02-07 23:55:33 | [32mINFO[0m | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-07 23:55:33 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-SmbServerConfiguration | Select-Object -ExpandProperty EnableSMB1Protocol
+2026-02-07 23:55:39 | [32mINFO[0m | CIA-Guardian | [CONF-02] Already compliant
+2026-02-07 23:55:39 | [32mINFO[0m | CIA-Guardian | [CONF-02] SMB1 Protocol Disabled: Compliant - SMB1 Protocol is disabled (Server config)
+2026-02-07 23:55:39 | [32mINFO[0m | CIA-Guardian | [CONF-03] Starting audit: Administrative Shares Disabled
+2026-02-07 23:55:39 | DEBUG    | CIA-Guardian | Executing CMD: net share
+2026-02-07 23:55:39 | [32mINFO[0m | CIA-Guardian | [CONF-03] Dry run - skipping remediation
+2026-02-07 23:55:39 | [32mINFO[0m | CIA-Guardian | [CONF-03] Administrative Shares Disabled: Non-Compliant - Administrative shares found: C$, ADMIN$, D$
+2026-02-07 23:55:39 | [32mINFO[0m | CIA-Guardian | [CONF-04] Starting audit: SMB Signing Required
+2026-02-07 23:55:39 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "RequireSecuritySignature"
+2026-02-07 23:55:40 | [32mINFO[0m | CIA-Guardian | [CONF-04] Dry run - skipping remediation
+2026-02-07 23:55:40 | [32mINFO[0m | CIA-Guardian | [CONF-04] SMB Signing Required: Non-Compliant - RequireSecuritySignature=0
+2026-02-07 23:55:40 | [32mINFO[0m | CIA-Guardian | [INTG-01] Starting audit: Defender Real-time Protection
+2026-02-07 23:55:40 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-MpPreference | Select-Object -ExpandProperty DisableRealtimeMonitoring
+2026-02-07 23:55:40 | [32mINFO[0m | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-07 23:55:40 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-MpPreference | Select-Object -ExpandProperty DisableRealtimeMonitoring
+2026-02-07 23:55:44 | [32mINFO[0m | CIA-Guardian | [INTG-01] Already compliant
+2026-02-07 23:55:44 | [32mINFO[0m | CIA-Guardian | [INTG-01] Defender Real-time Protection: Compliant - Real-time protection is ENABLED
+2026-02-07 23:55:44 | [32mINFO[0m | CIA-Guardian | [INTG-02] Starting audit: UAC Configuration
+2026-02-07 23:55:44 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin"
+2026-02-07 23:55:44 | [32mINFO[0m | CIA-Guardian | [INTG-02] Already compliant
+2026-02-07 23:55:44 | [32mINFO[0m | CIA-Guardian | [INTG-02] UAC Configuration: Compliant - ConsentPromptBehaviorAdmin=5 (Prompt for consent)
+2026-02-07 23:55:44 | [32mINFO[0m | CIA-Guardian | [INTG-03] Starting audit: PowerShell Execution Policy
+2026-02-07 23:55:44 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-ExecutionPolicy -Scope LocalMachine
+2026-02-07 23:55:44 | [32mINFO[0m | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-07 23:55:44 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-ExecutionPolicy -Scope LocalMachine
+2026-02-07 23:55:46 | [32mINFO[0m | CIA-Guardian | [INTG-03] Dry run - skipping remediation
+2026-02-07 23:55:46 | [32mINFO[0m | CIA-Guardian | [INTG-03] PowerShell Execution Policy: Non-Compliant - Execution Policy: Undefined
+2026-02-07 23:55:46 | [32mINFO[0m | CIA-Guardian | [INTG-04] Starting audit: Logon Audit Policy
+2026-02-07 23:55:46 | DEBUG    | CIA-Guardian | Executing CMD: auditpol /get /subcategory:"Logon"
+2026-02-07 23:55:47 | [31mERROR[0m | CIA-Guardian | [INTG-04] Audit failed: Error 0x00000522 occurred:
+A required privilege is not held by the client.
+2026-02-07 23:55:47 | [32mINFO[0m | CIA-Guardian | [INTG-04] Logon Audit Policy: Error - Failed to query audit policy
+2026-02-07 23:55:47 | [32mINFO[0m | CIA-Guardian | [INTG-05] Starting audit: System File Integrity
+2026-02-07 23:55:47 | DEBUG    | CIA-Guardian | Executing CMD: sfc /verifyonly
+2026-02-07 23:55:47 | [32mINFO[0m | CIA-Guardian | [INTG-05] Dry run - skipping remediation
+2026-02-07 23:55:47 | [32mINFO[0m | CIA-Guardian | [INTG-05] System File Integrity: Pending - SFC scan status unclear
+2026-02-07 23:55:47 | [32mINFO[0m | CIA-Guardian | [AVBL-01] Starting audit: Windows Firewall
+2026-02-07 23:55:47 | DEBUG    | CIA-Guardian | Executing CMD: netsh advfirewall show allprofiles
+2026-02-07 23:55:49 | [32mINFO[0m | CIA-Guardian | [AVBL-01] Already compliant
+2026-02-07 23:55:49 | [32mINFO[0m | CIA-Guardian | [AVBL-01] Windows Firewall: Compliant - Firewall is ON for all profiles
+2026-02-07 23:55:49 | [32mINFO[0m | CIA-Guardian | [AVBL-02] Starting audit: Volume Shadow Copy Service
+2026-02-07 23:55:49 | DEBUG    | CIA-Guardian | Executing CMD: sc query vss
+2026-02-07 23:55:49 | [32mINFO[0m | CIA-Guardian | [AVBL-02] Dry run - skipping remediation
+2026-02-07 23:55:49 | [32mINFO[0m | CIA-Guardian | [AVBL-02] Volume Shadow Copy Service: Non-Compliant - VSS service is STOPPED
+2026-02-07 23:55:49 | [32mINFO[0m | CIA-Guardian | [AVBL-03] Starting audit: Virtual Memory Configuration
+2026-02-07 23:55:49 | DEBUG    | CIA-Guardian | Executing CMD: wmic pagefile list /format:list
+2026-02-07 23:55:50 | [32mINFO[0m | CIA-Guardian | [AVBL-03] Dry run - skipping remediation
+2026-02-07 23:55:50 | [32mINFO[0m | CIA-Guardian | [AVBL-03] Virtual Memory Configuration: Non-Compliant - Page file size: 768MB (< 4096MB)
+2026-02-07 23:55:50 | [32mINFO[0m | CIA-Guardian | [AVBL-04] Starting audit: Windows Time Service
+2026-02-07 23:55:50 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-Service W32Time | Select-Object -ExpandProperty Status
+2026-02-07 23:55:50 | [32mINFO[0m | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-07 23:55:50 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-Service W32Time | Select-Object -ExpandProperty Status
+2026-02-07 23:55:52 | [32mINFO[0m | CIA-Guardian | [AVBL-04] Dry run - skipping remediation
+2026-02-07 23:55:52 | [32mINFO[0m | CIA-Guardian | [AVBL-04] Windows Time Service: Non-Compliant - W32Time service is STOPPED
+2026-02-07 23:55:52 | [32mINFO[0m | CIA-Guardian | Total Controls: 13
+2026-02-07 23:55:52 | [32mINFO[0m | CIA-Guardian | [32m[+][0m Compliant: 4
+2026-02-07 23:55:52 | [31mERROR[0m | CIA-Guardian | [31m[-][0m Non-Compliant: 6
+2026-02-07 23:55:52 | [33mWARNING[0m | CIA-Guardian | [33m[!][0m Errors: 2
+2026-02-07 23:55:52 | [32mINFO[0m | CIA-Guardian | Security Score: 41.0% (Grade: F)
+2026-02-07 23:55:52 | [32mINFO[0m | CIA-Guardian | Compliance: 30.8%
+2026-02-07 23:55:52 | [32mINFO[0m | CIA-Guardian | [32m[+][0m HTML Report: D:\Python\github\hardnening\reports\cia_guardian_report_20260207_235552.html
+2026-02-07 23:55:52 | [32mINFO[0m | CIA-Guardian | [32m[+][0m PDF Certificate: D:\Python\github\hardnening\reports\cia_guardian_certificate_20260207_235552.pdf

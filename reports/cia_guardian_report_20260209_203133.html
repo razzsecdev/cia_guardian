@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIA-Guardian Security Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --cia-primary: #0d6efd;
+            --cia-success: #198754;
+            --cia-danger: #dc3545;
+            --cia-warning: #ffc107;
+            --cia-info: #0dcaf0;
+        }
+        
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0 auto;
+            border: 8px solid;
+        }
+        
+        .score-a { border-color: var(--cia-success); color: var(--cia-success); }
+        .score-b { border-color: #20c997; color: #20c997; }
+        .score-c { border-color: var(--cia-warning); color: var(--cia-warning); }
+        .score-d { border-color: #fd7e14; color: #fd7e14; }
+        .score-f { border-color: var(--cia-danger); color: var(--cia-danger); }
+        
+        .metric-card {
+            transition: transform 0.2s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .risk-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+        
+        .status-compliant { color: var(--cia-success); }
+        .status-remediated { color: #20c997; }
+        .status-non-compliant { color: var(--cia-danger); }
+        .status-error { color: var(--cia-warning); }
+        .status-timeout { color: #fd7e14; }  /* v2.1: Orange for TIMEOUT */
+        .status-na { color: #6c757d; }
+        
+        .progress-bar-confidentiality { background-color: #6f42c1; }
+        .progress-bar-integrity { background-color: #0d6efd; }
+        .progress-bar-availability { background-color: #20c997; }
+        
+        .control-row:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        
+        [data-bs-theme="dark"] .control-row:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        
+        .header-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+        }
+        
+        .evidence-text {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85rem;
+            background-color: rgba(0,0,0,0.05);
+            padding: 0.5rem;
+            border-radius: 4px;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+        
+        [data-bs-theme="dark"] .evidence-text {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .export-btn {
+            margin-right: 0.5rem;
+        }
+        
+        @media print {
+            .no-print { display: none !important; }
+            .header-banner { background: #333 !important; -webkit-print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Banner -->
+    <div class="header-banner no-print">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="mb-0"><i class="bi bi-shield-check me-2"></i>CIA-Guardian</h1>
+                    <p class="mb-0 opacity-75">Windows Security Hardening Report</p>
+                </div>
+                <div class="d-flex align-items-center">
+                    <span class="theme-toggle me-3" onclick="toggleTheme()" title="Toggle Theme">
+                        <i class="bi bi-sun-fill" id="theme-icon"></i>
+                    </span>
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-download me-1"></i>Export
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="window.print()"><i class="bi bi-printer me-2"></i>Print / PDF</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="exportJSON()"><i class="bi bi-filetype-json me-2"></i>JSON</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="exportCSV()"><i class="bi bi-filetype-csv me-2"></i>CSV</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <!-- System Info Bar -->
+        <div class="card mb-4">
+            <div class="card-body py-2">
+                <div class="row text-center text-md-start">
+                    <div class="col-md-3">
+                        <small class="text-muted">Hostname</small>
+                        <div class="fw-bold">DESKTOP-BUCUD55</div>
+                    </div>
+                    <div class="col-md-3">
+                        <small class="text-muted">Operating System</small>
+                        <div class="fw-bold">Windows 10.0.22631</div>
+                    </div>
+                    <div class="col-md-3">
+                        <small class="text-muted">User</small>
+                        <div class="fw-bold">DESKTOP-BUCUD55\Razmy</div>
+                    </div>
+                    <div class="col-md-3">
+                        <small class="text-muted">Report Generated</small>
+                        <div class="fw-bold">2026-02-09 20:31:33</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="row mb-4">
+            <!-- Security Score -->
+            <div class="col-lg-4 mb-3">
+                <div class="card h-100 metric-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Security Score</h5>
+                        <div class="score-circle score-f">
+                            <span>F</span>
+                            <small style="font-size: 0.8rem;">20.8%</small>
+                        </div>
+                        <p class="text-muted mt-2 mb-0">Overall security posture</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Compliance Stats -->
+            <div class="col-lg-4 mb-3">
+                <div class="card h-100 metric-card">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Compliance Status</h5>
+                        <div class="progress mb-3" style="height: 25px;">
+                            <div class="progress-bar bg-success" style="width: 17.0%">
+                                2 Compliant
+                            </div>
+                            
+                            
+                            <div class="progress-bar bg-danger" style="width: 83.0%">
+                                10 Fail
+                            </div>
+                            
+                        </div>
+                        <div class="row text-center small">
+                            <div class="col">
+                                <div class="text-success fw-bold fs-4">2</div>
+                                <div class="text-muted">Compliant</div>
+                            </div>
+                            <div class="col">
+                                <div class="fw-bold fs-4" style="color: #20c997;">0</div>
+                                <div class="text-muted">Remediated</div>
+                            </div>
+                            <div class="col">
+                                <div class="text-danger fw-bold fs-4">10</div>
+                                <div class="text-muted">Non-Compliant</div>
+                            </div>
+                            <div class="col">
+                                <div class="fw-bold fs-4" style="color: #fd7e14;">0</div>
+                                <div class="text-muted">Timeouts</div>
+                            </div>
+                            <div class="col">
+                                <div class="text-warning fw-bold fs-4">0</div>
+                                <div class="text-muted">Errors</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Category Breakdown -->
+            <div class="col-lg-4 mb-3">
+                <div class="card h-100 metric-card">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">CIA Triad Scores</h5>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Network Security</span>
+                                <span class="fw-bold">20.8%</span>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar progress-bar-network security" style="width: 20.8%"></div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Risk Summary -->
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Risk Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    
+                    <div class="col-md-3 col-6 mb-2">
+                        <div class="d-flex align-items-center">
+                            <span class="badge risk-badge me-2 
+                                bg-info text-dark
+                                ">
+                                Medium
+                            </span>
+                            <span class="fw-bold">7 issues</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-6 mb-2">
+                        <div class="d-flex align-items-center">
+                            <span class="badge risk-badge me-2 
+                                bg-warning text-dark
+                                ">
+                                High
+                            </span>
+                            <span class="fw-bold">1 issue</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 col-6 mb-2">
+                        <div class="d-flex align-items-center">
+                            <span class="badge risk-badge me-2 
+                                bg-secondary">
+                                Low
+                            </span>
+                            <span class="fw-bold">2 issues</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Detailed Results -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-list-check me-2"></i>Control Details</h5>
+                <div class="btn-group no-print" role="group">
+                    <button type="button" class="btn btn-outline-secondary btn-sm active" onclick="filterResults('all')">All</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="filterResults('fail')">Failed</button>
+                    <button type="button" class="btn btn-outline-success btn-sm" onclick="filterResults('pass')">Passed</button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="results-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 100px;">Control ID</th>
+                                <th>Name</th>
+                                <th style="width: 120px;">Category</th>
+                                <th style="width: 80px;">Risk</th>
+                                <th style="width: 120px;">Status</th>
+                                <th>Evidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr class="control-row" data-status="Non-Compliant">
+                                <td><code>NETW-01</code></td>
+                                <td>
+                                    <strong>NetBIOS over TCP/IP Disabled</strong>
+                                    
+                                    <br><small class="text-muted">Dry run - remediation skipped</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-info text-dark
+                                        ">
+                                        Medium
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-non-compliant"><i class="bi bi-x-circle-fill me-1"></i>Non-Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">NetBIOS over TCP/IP is enabled on one or more adapters</div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="control-row" data-status="Non-Compliant">
+                                <td><code>NETW-02</code></td>
+                                <td>
+                                    <strong>LLMNR Disabled</strong>
+                                    
+                                    <br><small class="text-muted">Dry run - remediation skipped</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-warning text-dark
+                                        ">
+                                        High
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-non-compliant"><i class="bi bi-x-circle-fill me-1"></i>Non-Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">Registry value 'EnableMulticast' not found</div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="control-row" data-status="Non-Compliant">
+                                <td><code>NETW-03</code></td>
+                                <td>
+                                    <strong>WPAD Disabled</strong>
+                                    
+                                    <br><small class="text-muted">Dry run - remediation skipped</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-info text-dark
+                                        ">
+                                        Medium
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-non-compliant"><i class="bi bi-x-circle-fill me-1"></i>Non-Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">Registry value 'WpadOverride' not found</div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="control-row" data-status="Non-Compliant">
+                                <td><code>NETW-04</code></td>
+                                <td>
+                                    <strong>IPv6 Disabled</strong>
+                                    
+                                    <br><small class="text-muted">Dry run - remediation skipped</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-secondary">
+                                        Low
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-non-compliant"><i class="bi bi-x-circle-fill me-1"></i>Non-Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">Registry value 'DisabledComponents' not found</div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="control-row" data-status="Non-Compliant">
+                                <td><code>NETW-05</code></td>
+                                <td>
+                                    <strong>Windows Firewall Logging</strong>
+                                    
+                                    <br><small class="text-muted">Dry run - remediation skipped</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-info text-dark
+                                        ">
+                                        Medium
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-non-compliant"><i class="bi bi-x-circle-fill me-1"></i>Non-Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">Firewall logging is not fully enabled</div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="control-row" data-status="Compliant">
+                                <td><code>NETW-06</code></td>
+                                <td>
+                                    <strong>Firewall Default Deny Inbound</strong>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-warning text-dark
+                                        ">
+                                        High
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-compliant"><i class="bi bi-check-circle-fill me-1"></i>Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">Firewall blocks inbound connections by default</div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="control-row" data-status="Non-Compliant">
+                                <td><code>NETW-07</code></td>
+                                <td>
+                                    <strong>WiFi Sense Disabled</strong>
+                                    
+                                    <br><small class="text-muted">Dry run - remediation skipped</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-info text-dark
+                                        ">
+                                        Medium
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-non-compliant"><i class="bi bi-x-circle-fill me-1"></i>Non-Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">Registry value 'AutoConnectAllowedOEM' not found</div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="control-row" data-status="Non-Compliant">
+                                <td><code>NETW-08</code></td>
+                                <td>
+                                    <strong>Hotspot 2.0 Disabled</strong>
+                                    
+                                    <br><small class="text-muted">Dry run - remediation skipped</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-secondary">
+                                        Low
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-non-compliant"><i class="bi bi-x-circle-fill me-1"></i>Non-Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">Registry value 'OsuRegistrationStatus' not found</div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="control-row" data-status="Non-Compliant">
+                                <td><code>NETW-09</code></td>
+                                <td>
+                                    <strong>Network Discovery Disabled</strong>
+                                    
+                                    <br><small class="text-muted">Dry run - remediation skipped</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-info text-dark
+                                        ">
+                                        Medium
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-non-compliant"><i class="bi bi-x-circle-fill me-1"></i>Non-Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">Network Discovery is enabled</div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="control-row" data-status="Compliant">
+                                <td><code>NETW-10</code></td>
+                                <td>
+                                    <strong>File and Printer Sharing Disabled</strong>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-info text-dark
+                                        ">
+                                        Medium
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-compliant"><i class="bi bi-check-circle-fill me-1"></i>Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">File and Printer Sharing properly restricted</div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="control-row" data-status="Non-Compliant">
+                                <td><code>NETW-11</code></td>
+                                <td>
+                                    <strong>ICMP Redirect Disabled</strong>
+                                    
+                                    <br><small class="text-muted">Dry run - remediation skipped</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-info text-dark
+                                        ">
+                                        Medium
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-non-compliant"><i class="bi bi-x-circle-fill me-1"></i>Non-Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">Registry value 'EnableICMPRedirect' not found</div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="control-row" data-status="Non-Compliant">
+                                <td><code>NETW-12</code></td>
+                                <td>
+                                    <strong>Source Routing Disabled</strong>
+                                    
+                                    <br><small class="text-muted">Dry run - remediation skipped</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        bg-success">
+                                        Network Security
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge risk-badge
+                                        bg-info text-dark
+                                        ">
+                                        Medium
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status-non-compliant"><i class="bi bi-x-circle-fill me-1"></i>Non-Compliant</span>
+                                    
+                                </td>
+                                <td>
+                                    <div class="evidence-text">Registry value 'DisableIPSourceRouting' not found</div>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-4 text-muted small">
+            <p>Generated by CIA-Guardian v1.0.0 | Report valid for 90 days from generation date</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Theme toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.getAttribute('data-bs-theme') === 'dark') {
+                html.setAttribute('data-bs-theme', 'light');
+                icon.className = 'bi bi-sun-fill';
+            } else {
+                html.setAttribute('data-bs-theme', 'dark');
+                icon.className = 'bi bi-moon-fill';
+            }
+        }
+
+        // Filter results
+        function filterResults(type) {
+            const rows = document.querySelectorAll('.control-row');
+            rows.forEach(row => {
+                const status = row.getAttribute('data-status');
+                if (type === 'all') {
+                    row.style.display = '';
+                } else if (type === 'fail') {
+                    row.style.display = (status === 'Non-Compliant' || status === 'Error' || status === 'Timeout') ? '' : 'none';
+                } else if (type === 'pass') {
+                    row.style.display = (status === 'Compliant' || status === 'Remediated') ? '' : 'none';
+                }
+            });
+        }
+
+        // Export functions
+        const auditData = {"system_info": {"hostname": "DESKTOP-BUCUD55", "os_name": "Windows", "os_version": "10.0.22631", "os_build": "Microsoft Windows [Version 10.0.22631.6199]", "architecture": "AMD64", "domain": "DESKTOP-BUCUD55", "ip_address": "172.23.96.1", "username": "Razmy", "is_admin": false, "audit_timestamp": "2026-02-09T20:31:28.302071"}, "summary": {"total_controls": 12, "compliant": 2, "non_compliant": 10, "remediated": 0, "errors": 0, "timeouts": 0, "not_applicable": 0, "security_score": 20.8, "compliance_percentage": 16.7, "letter_grade": "F", "risk_summary": {"Medium": 7, "High": 1, "Low": 2}, "category_scores": {"Network Security": 20.8}, "execution_mode": "sequential", "execution_time_seconds": 8.1}, "results": [{"control_id": "NETW-01", "name": "NetBIOS over TCP/IP Disabled", "category": "Network Security", "status": "Non-Compliant", "risk_level": "Medium", "evidence": "NetBIOS over TCP/IP is enabled on one or more adapters", "details": "Dry run - remediation skipped", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:31.702225", "error_message": null, "command_output": "0\r\n0\r\n0\r\n0", "execution_time_ms": 0}, {"control_id": "NETW-02", "name": "LLMNR Disabled", "category": "Network Security", "status": "Non-Compliant", "risk_level": "High", "evidence": "Registry value 'EnableMulticast' not found", "details": "Dry run - remediation skipped", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:32.048729", "error_message": null, "command_output": "ERROR: The system was unable to find the specified registry key or value.", "execution_time_ms": 0}, {"control_id": "NETW-03", "name": "WPAD Disabled", "category": "Network Security", "status": "Non-Compliant", "risk_level": "Medium", "evidence": "Registry value 'WpadOverride' not found", "details": "Dry run - remediation skipped", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:32.141954", "error_message": null, "command_output": "ERROR: The system was unable to find the specified registry key or value.", "execution_time_ms": 0}, {"control_id": "NETW-04", "name": "IPv6 Disabled", "category": "Network Security", "status": "Non-Compliant", "risk_level": "Low", "evidence": "Registry value 'DisabledComponents' not found", "details": "Dry run - remediation skipped", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:32.236664", "error_message": null, "command_output": "ERROR: The system was unable to find the specified registry key or value.", "execution_time_ms": 0}, {"control_id": "NETW-05", "name": "Windows Firewall Logging", "category": "Network Security", "status": "Non-Compliant", "risk_level": "Medium", "evidence": "Firewall logging is not fully enabled", "details": "Dry run - remediation skipped", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:32.433495", "error_message": null, "command_output": "Domain Profile Settings: \r\n----------------------------------------------------------------------\r\nLogAllowedConnections                 Disable\r\nLogDroppedConnections                 Disable\r\nFileName                              %systemroot%\\system32\\LogFiles\\Firewall\\pfirewall.log\r\nMaxFileSize                           4096\r\n\r\nPrivate Profile Settings: \r\n----------------------------------------------------------------------\r\nLogAllowedConnections                 Disable\r\nLogDroppedConnections", "execution_time_ms": 0}, {"control_id": "NETW-06", "name": "Firewall Default Deny Inbound", "category": "Network Security", "status": "Compliant", "risk_level": "High", "evidence": "Firewall blocks inbound connections by default", "details": "", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:32.615684", "error_message": null, "command_output": "Domain Profile Settings: \r\n----------------------------------------------------------------------\r\nFirewall Policy                       BlockInbound,AllowOutbound\r\n\r\nPrivate Profile Settings: \r\n----------------------------------------------------------------------\r\nFirewall Policy                       BlockInbound,AllowOutbound\r\n\r\nPublic Profile Settings: \r\n----------------------------------------------------------------------\r\nFirewall Policy                       BlockInbound,AllowOutbound\r\nOk.", "execution_time_ms": 0}, {"control_id": "NETW-07", "name": "WiFi Sense Disabled", "category": "Network Security", "status": "Non-Compliant", "risk_level": "Medium", "evidence": "Registry value 'AutoConnectAllowedOEM' not found", "details": "Dry run - remediation skipped", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:32.704778", "error_message": null, "command_output": "ERROR: The system was unable to find the specified registry key or value.", "execution_time_ms": 0}, {"control_id": "NETW-08", "name": "Hotspot 2.0 Disabled", "category": "Network Security", "status": "Non-Compliant", "risk_level": "Low", "evidence": "Registry value 'OsuRegistrationStatus' not found", "details": "Dry run - remediation skipped", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:32.796017", "error_message": null, "command_output": "ERROR: The system was unable to find the specified registry key or value.", "execution_time_ms": 0}, {"control_id": "NETW-09", "name": "Network Discovery Disabled", "category": "Network Security", "status": "Non-Compliant", "risk_level": "Medium", "evidence": "Network Discovery is enabled", "details": "Dry run - remediation skipped", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:32.993328", "error_message": null, "command_output": "Rule Name:                            Network Discovery (LLMNR-UDP-In)\r\n----------------------------------------------------------------------\r\nEnabled:                              Yes\r\nDirection:                            In\r\nProfiles:                             Private\r\nGrouping:                             Network Discovery\r\nLocalIP:                              Any\r\nRemoteIP:                             LocalSubnet\r\nProtocol:                             UDP\r\nLocalPort:                    ", "execution_time_ms": 0}, {"control_id": "NETW-10", "name": "File and Printer Sharing Disabled", "category": "Network Security", "status": "Compliant", "risk_level": "Medium", "evidence": "File and Printer Sharing properly restricted", "details": "", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:33.356830", "error_message": null, "command_output": "Rule Name:                            File and Printer Sharing (SMB-In)\r\n----------------------------------------------------------------------\r\nEnabled:                              No\r\nDirection:                            In\r\nProfiles:                             Domain\r\nGrouping:                             File and Printer Sharing\r\nLocalIP:                              Any\r\nRemoteIP:                             Any\r\nProtocol:                             TCP\r\nLocalPort:                      ", "execution_time_ms": 0}, {"control_id": "NETW-11", "name": "ICMP Redirect Disabled", "category": "Network Security", "status": "Non-Compliant", "risk_level": "Medium", "evidence": "Registry value 'EnableICMPRedirect' not found", "details": "Dry run - remediation skipped", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:33.507495", "error_message": null, "command_output": "ERROR: The system was unable to find the specified registry key or value.", "execution_time_ms": 0}, {"control_id": "NETW-12", "name": "Source Routing Disabled", "category": "Network Security", "status": "Non-Compliant", "risk_level": "Medium", "evidence": "Registry value 'DisableIPSourceRouting' not found", "details": "Dry run - remediation skipped", "initial_state": null, "post_fix_state": null, "remediation_applied": false, "remediation_success": false, "timestamp": "2026-02-09T20:31:33.689816", "error_message": null, "command_output": "ERROR: The system was unable to find the specified registry key or value.", "execution_time_ms": 0}], "preflight_results": [{"name": "PowerShell Version", "passed": true, "message": "PowerShell 5.1 found: v5.1.22621.6133", "details": "Minimum version met (7+ recommended for best performance)", "is_critical": true}, {"name": "Disk Space", "passed": true, "message": "Sufficient disk space: 18,893 MB available", "details": "Minimum required: 100 MB", "is_critical": false}, {"name": "Administrator Privileges", "passed": true, "message": "Running WITHOUT Administrator privileges", "details": "Some controls may fail or report incorrect status", "is_critical": false}, {"name": "Windows Version", "passed": true, "message": "Compatible: Windows 11", "details": "Version: 10.0.22631", "is_critical": true}, {"name": "Required Services", "passed": true, "message": "All required services accessible (3/3)", "details": "WinDefend, EventLog, Schedule", "is_critical": false}, {"name": "Network Connectivity", "passed": true, "message": "Network connectivity available", "details": "Time synchronization endpoints reachable", "is_critical": false}], "generated_at": "2026-02-09T20:31:33.730355", "tool_version": "1.0.0"};
+        
+        function exportJSON() {
+            const blob = new Blob([JSON.stringify(auditData, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'cia_guardian_report.json';
+            a.click();
+        }
+        
+        function exportCSV() {
+            let csv = 'Control ID,Name,Category,Risk Level,Status,Evidence\n';
+            auditData.results.forEach(r => {
+                csv += `"${r.control_id}","${r.name}","${r.category}","${r.risk_level}","${r.status}","${r.evidence}"\n`;
+            });
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'cia_guardian_report.csv';
+            a.click();
+        }
+    </script>
+</body>
+</html>

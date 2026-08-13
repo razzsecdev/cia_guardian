@@ -1,0 +1,254 @@
+2026-02-09 20:32:34 | DEBUG    | CIA-Guardian | GuardianEngine initialized
+2026-02-09 20:32:34 | DEBUG    | CIA-Guardian | Executing CMD: pwsh -NoProfile -Command "$PSVersionTable.PSVersion.ToString()"
+2026-02-09 20:32:34 | DEBUG    | CIA-Guardian | Executing PowerShell: $PSVersionTable.PSVersion.ToString()
+2026-02-09 20:32:36 | DEBUG    | CIA-Guardian | Executing CMD: net session 2>&1
+2026-02-09 20:32:38 | [33mWARNING[0m | CIA-Guardian | Access Denied for command: net session 2>&1
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: sc query WinDefend
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: sc query EventLog
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: sc query Schedule
+2026-02-09 20:32:39 | [32mINFO[0m | CIA-Guardian | [32m[+][0m All pre-flight checks passed
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: net session 2>&1
+2026-02-09 20:32:39 | [33mWARNING[0m | CIA-Guardian | Access Denied for command: net session 2>&1
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: ver
+2026-02-09 20:32:39 | [32mINFO[0m | CIA-Guardian | Hostname: DESKTOP-BUCUD55
+2026-02-09 20:32:39 | [32mINFO[0m | CIA-Guardian | OS: Windows 10.0.22631
+2026-02-09 20:32:39 | [32mINFO[0m | CIA-Guardian | User: DESKTOP-BUCUD55\Razmy
+2026-02-09 20:32:39 | [32mINFO[0m | CIA-Guardian | Administrator: No
+2026-02-09 20:32:39 | [33mWARNING[0m | CIA-Guardian | [33m[!][0m Running without administrator privileges - some checks may fail
+2026-02-09 20:32:39 | [32mINFO[0m | CIA-Guardian | [34m[*][0m Mode: DRY RUN (Audit Only)
+2026-02-09 20:32:39 | [32mINFO[0m | CIA-Guardian | Controls to audit: 85
+2026-02-09 20:32:39 | [32mINFO[0m | CIA-Guardian | Execution: parallel (8 workers)
+2026-02-09 20:32:39 | [32mINFO[0m | CIA-Guardian | SFC (INTG-05) will run in background with 45 min timeout
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | Starting SFC (INTG-05) in background thread...
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [INTG-05] SFC background task started (timeout: 2700s)
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | Executing 84 controls with 8 workers...
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [INTG-05] Starting audit: System File Integrity
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: sfc /verifyonly
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [CONF-01] Starting audit: BitLocker Encryption
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: manage-bde -status C:
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [CONF-02] Starting audit: SMB1 Protocol Disabled
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-WindowsOptionalFeature -Online -FeatureName SMB1Protocol | Select-Object -ExpandProperty State
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [CONF-03] Starting audit: Administrative Shares Disabled
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [CONF-04] Starting audit: SMB Signing Required
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: net share
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [CONF-06] Starting audit: RDP Network Level Authentication
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v "UserAuthentication"
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [CONF-05] Starting audit: Guest Account Disabled
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing PowerShell: (Get-LocalUser -Name "Guest" -ErrorAction SilentlyContinue).Enabled
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-WindowsOptionalFeature -Online -FeatureName SMB1Protocol | Select-Object -ExpandProperty State
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "RequireSecuritySignature"
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing PowerShell: (Get-LocalUser -Name "Guest" -ErrorAction SilentlyContinue).Enabled
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [CONF-07] Starting audit: Remote Registry Disabled
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: sc query RemoteRegistry
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [CONF-08] Starting audit: AutoPlay Disabled
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoDriveTypeAutoRun"
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [CONF-06] Already compliant
+2026-02-09 20:32:39 | INFO     | CIA-Guardian | [CONF-09] Starting audit: Anonymous Enumeration Disabled
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | [CONF-06] Completed: Compliant
+2026-02-09 20:32:39 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v "RestrictAnonymous"
+2026-02-09 20:32:40 | ERROR    | CIA-Guardian | [INTG-05] Audit failed: None
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [INTG-05] SFC completed in 0s with status: Error
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-08] Dry run - skipping remediation
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-10] Starting audit: NTLM Restriction
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | [CONF-08] Completed: Non-Compliant
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v "LMCompatibilityLevel"
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-04] Dry run - skipping remediation
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-11] Starting audit: WDigest Disabled
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest" /v "UseLogonCredential"
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | [CONF-04] Completed: Non-Compliant
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-07] Already compliant
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-12] Starting audit: Cached Credentials Limited
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | [CONF-07] Completed: Compliant
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v "CachedLogonsCount"
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-11] Dry run - skipping remediation
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-13] Starting audit: LAN Manager Hash Disabled
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v "NoLMHash"
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | [CONF-11] Completed: Non-Compliant
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-12] Dry run - skipping remediation
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-14] Starting audit: Anonymous SAM Access Disabled
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v "RestrictAnonymousSAM"
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | [CONF-12] Completed: Non-Compliant
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-10] Dry run - skipping remediation
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-15] Starting audit: Null Session Pipes Empty
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v "NullSessionPipes"
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | [CONF-10] Completed: Non-Compliant
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-03] Dry run - skipping remediation
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-16] Starting audit: Printer Driver Installation Restricted
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Print\Providers\LanMan Print Services\Servers" /v "AddPrinterDrivers"
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | [CONF-03] Completed: Non-Compliant
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-09] Dry run - skipping remediation
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-14] Already compliant
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-17] Starting audit: Always Install Elevated Disabled
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | [CONF-09] Completed: Non-Compliant
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-18] Starting audit: Telemetry Level Restricted
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer" /v "AlwaysInstallElevated"
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | [CONF-14] Completed: Compliant
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v "AllowTelemetry"
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-13] Already compliant
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [INTG-01] Starting audit: Defender Real-time Protection
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | [CONF-13] Completed: Compliant
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-MpPreference | Select-Object -ExpandProperty DisableRealtimeMonitoring
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [CONF-15] Dry run - skipping remediation
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | [INTG-02] Starting audit: UAC Configuration
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | [CONF-15] Completed: Non-Compliant
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "ConsentPromptBehaviorAdmin"
+2026-02-09 20:32:40 | INFO     | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-MpPreference | Select-Object -ExpandProperty DisableRealtimeMonitoring
+2026-02-09 20:32:40 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer" /v "AlwaysInstallElevated"
+2026-02-09 20:32:41 | INFO     | CIA-Guardian | [INTG-02] Already compliant
+2026-02-09 20:32:41 | INFO     | CIA-Guardian | [INTG-03] Starting audit: PowerShell Execution Policy
+2026-02-09 20:32:41 | DEBUG    | CIA-Guardian | [INTG-02] Completed: Compliant
+2026-02-09 20:32:41 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-ExecutionPolicy -Scope LocalMachine
+2026-02-09 20:32:41 | INFO     | CIA-Guardian | [CONF-16] Dry run - skipping remediation
+2026-02-09 20:32:41 | INFO     | CIA-Guardian | [INTG-04] Starting audit: Logon Audit Policy
+2026-02-09 20:32:41 | DEBUG    | CIA-Guardian | Executing CMD: auditpol /get /subcategory:"Logon"
+2026-02-09 20:32:41 | DEBUG    | CIA-Guardian | [CONF-16] Completed: Non-Compliant
+2026-02-09 20:32:41 | INFO     | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-09 20:32:41 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-ExecutionPolicy -Scope LocalMachine
+2026-02-09 20:32:41 | INFO     | CIA-Guardian | [CONF-18] Dry run - skipping remediation
+2026-02-09 20:32:41 | INFO     | CIA-Guardian | [INTG-06] Starting audit: LSA Protection (RunAsPPL)
+2026-02-09 20:32:41 | DEBUG    | CIA-Guardian | [CONF-18] Completed: Non-Compliant
+2026-02-09 20:32:41 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v "RunAsPPL"
+2026-02-09 20:32:41 | INFO     | CIA-Guardian | [CONF-17] Already compliant
+2026-02-09 20:32:41 | INFO     | CIA-Guardian | [INTG-07] Starting audit: Credential Guard
+2026-02-09 20:32:41 | DEBUG    | CIA-Guardian | [CONF-17] Completed: Compliant
+2026-02-09 20:32:41 | DEBUG    | CIA-Guardian | Executing PowerShell: 
+                $dg = Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard -ErrorAction SilentlyContinue
+                if ($dg) {
+                    $securityServicesRunning = $dg.SecurityServicesRunning
+                    if ($securityServicesRunning -contains 1) {
+                        Write-Output "CredentialGuard: Enabled"
+                    } else {
+                        Write-Output "CredentialGuard: Disabled"
+                    }
+                    Write-Output "VBS Status: $($dg.VirtualizationBasedSecurityStatus)"
+                } else {
+                    Write-Output "DeviceGuard: Not available"
+                }
+                
+2026-02-09 20:32:42 | ERROR    | CIA-Guardian | [INTG-04] Audit failed: Error 0x00000522 occurred:
+A required privilege is not held by the client.
+2026-02-09 20:32:42 | INFO     | CIA-Guardian | [INTG-08] Starting audit: Secure Boot Enabled
+2026-02-09 20:32:42 | DEBUG    | CIA-Guardian | [INTG-04] Completed: Error
+2026-02-09 20:32:42 | DEBUG    | CIA-Guardian | Executing PowerShell: Confirm-SecureBootUEFI
+2026-02-09 20:32:42 | INFO     | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-09 20:32:42 | DEBUG    | CIA-Guardian | Executing PowerShell: Confirm-SecureBootUEFI
+2026-02-09 20:32:42 | INFO     | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-09 20:32:42 | DEBUG    | CIA-Guardian | Executing PowerShell: 
+                $dg = Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard -ErrorAction SilentlyContinue
+                if ($dg) {
+                    $securityServicesRunning = $dg.SecurityServicesRunning
+                    if ($securityServicesRunning -contains 1) {
+                        Write-Output "CredentialGuard: Enabled"
+                    } else {
+                        Write-Output "CredentialGuard: Disabled"
+                    }
+                    Write-Output "VBS Status: $($dg.VirtualizationBasedSecurityStatus)"
+                } else {
+                    Write-Output "DeviceGuard: Not available"
+                }
+                
+2026-02-09 20:32:44 | INFO     | CIA-Guardian | [INTG-06] Dry run - skipping remediation
+2026-02-09 20:32:44 | INFO     | CIA-Guardian | [INTG-09] Starting audit: Driver Signature Enforcement
+2026-02-09 20:32:44 | DEBUG    | CIA-Guardian | [INTG-06] Completed: Non-Compliant
+2026-02-09 20:32:44 | DEBUG    | CIA-Guardian | Executing CMD: bcdedit /enum {current}
+2026-02-09 20:32:46 | ERROR    | CIA-Guardian | [CONF-01] Audit failed: 
+2026-02-09 20:32:46 | INFO     | CIA-Guardian | [INTG-10] Starting audit: PowerShell Script Block Logging
+2026-02-09 20:32:46 | DEBUG    | CIA-Guardian | [CONF-01] Completed: Error
+2026-02-09 20:32:46 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging" /v "EnableScriptBlockLogging"
+2026-02-09 20:32:47 | ERROR    | CIA-Guardian | [INTG-09] Audit failed: 
+2026-02-09 20:32:47 | INFO     | CIA-Guardian | [INTG-11] Starting audit: PowerShell Transcription
+2026-02-09 20:32:47 | DEBUG    | CIA-Guardian | [INTG-09] Completed: Error
+2026-02-09 20:32:47 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription" /v "EnableTranscripting"
+2026-02-09 20:32:49 | INFO     | CIA-Guardian | [CONF-05] Already compliant
+2026-02-09 20:32:49 | INFO     | CIA-Guardian | [INTG-12] Starting audit: Command Line Auditing
+2026-02-09 20:32:49 | DEBUG    | CIA-Guardian | [CONF-05] Completed: Compliant
+2026-02-09 20:32:49 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit" /v "ProcessCreationIncludeCmdLine_Enabled"
+2026-02-09 20:32:49 | INFO     | CIA-Guardian | [INTG-03] Dry run - skipping remediation
+2026-02-09 20:32:49 | INFO     | CIA-Guardian | [INTG-13] Starting audit: Object Access Audit
+2026-02-09 20:32:49 | DEBUG    | CIA-Guardian | [INTG-03] Completed: Non-Compliant
+2026-02-09 20:32:49 | DEBUG    | CIA-Guardian | Executing CMD: auditpol /get /subcategory:"File System"
+2026-02-09 20:32:49 | INFO     | CIA-Guardian | [INTG-10] Dry run - skipping remediation
+2026-02-09 20:32:49 | INFO     | CIA-Guardian | [INTG-14] Starting audit: Privilege Use Audit
+2026-02-09 20:32:49 | DEBUG    | CIA-Guardian | [INTG-10] Completed: Non-Compliant
+2026-02-09 20:32:49 | DEBUG    | CIA-Guardian | Executing CMD: auditpol /get /subcategory:"Sensitive Privilege Use"
+2026-02-09 20:32:49 | INFO     | CIA-Guardian | [INTG-11] Dry run - skipping remediation
+2026-02-09 20:32:49 | INFO     | CIA-Guardian | [INTG-15] Starting audit: Policy Change Audit
+2026-02-09 20:32:49 | DEBUG    | CIA-Guardian | [INTG-11] Completed: Non-Compliant
+2026-02-09 20:32:49 | DEBUG    | CIA-Guardian | Executing CMD: auditpol /get /subcategory:"Audit Policy Change"
+2026-02-09 20:32:50 | ERROR    | CIA-Guardian | [INTG-13] Audit failed: Error 0x00000522 occurred:
+A required privilege is not held by the client.
+2026-02-09 20:32:50 | INFO     | CIA-Guardian | [INTG-16] Starting audit: SEHOP Enabled
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | [INTG-13] Completed: Error
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | Executing CMD: reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "DisableExceptionChainValidation"
+2026-02-09 20:32:50 | ERROR    | CIA-Guardian | [INTG-14] Audit failed: Error 0x00000522 occurred:
+A required privilege is not held by the client.
+2026-02-09 20:32:50 | INFO     | CIA-Guardian | [INTG-17] Starting audit: DEP/NX Enabled
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | [INTG-14] Completed: Error
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | Executing CMD: bcdedit /enum {current}
+2026-02-09 20:32:50 | INFO     | CIA-Guardian | [INTG-12] Dry run - skipping remediation
+2026-02-09 20:32:50 | INFO     | CIA-Guardian | [INTG-18] Starting audit: ASLR Enabled
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | [INTG-12] Completed: Non-Compliant
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-ProcessMitigation -System | Select-Object -ExpandProperty ASLR | Format-List
+2026-02-09 20:32:50 | INFO     | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-ProcessMitigation -System | Select-Object -ExpandProperty ASLR | Format-List
+2026-02-09 20:32:50 | ERROR    | CIA-Guardian | [INTG-15] Audit failed: Error 0x00000522 occurred:
+A required privilege is not held by the client.
+2026-02-09 20:32:50 | INFO     | CIA-Guardian | [AVBL-01] Starting audit: Windows Firewall
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | [INTG-15] Completed: Error
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | Executing CMD: netsh advfirewall show allprofiles
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-SmbServerConfiguration | Select-Object -ExpandProperty EnableSMB1Protocol
+2026-02-09 20:32:50 | INFO     | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-SmbServerConfiguration | Select-Object -ExpandProperty EnableSMB1Protocol
+2026-02-09 20:32:50 | INFO     | CIA-Guardian | [INTG-16] Already compliant
+2026-02-09 20:32:50 | INFO     | CIA-Guardian | [AVBL-02] Starting audit: Volume Shadow Copy Service
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | [INTG-16] Completed: Compliant
+2026-02-09 20:32:50 | DEBUG    | CIA-Guardian | Executing CMD: sc query vss
+2026-02-09 20:32:51 | ERROR    | CIA-Guardian | [INTG-17] Audit failed: 
+2026-02-09 20:32:51 | INFO     | CIA-Guardian | [AVBL-03] Starting audit: Virtual Memory Configuration
+2026-02-09 20:32:51 | DEBUG    | CIA-Guardian | [INTG-17] Completed: Error
+2026-02-09 20:32:51 | DEBUG    | CIA-Guardian | Executing CMD: wmic pagefile list /format:list
+2026-02-09 20:32:51 | INFO     | CIA-Guardian | [AVBL-02] Dry run - skipping remediation
+2026-02-09 20:32:51 | INFO     | CIA-Guardian | [AVBL-04] Starting audit: Windows Time Service
+2026-02-09 20:32:51 | DEBUG    | CIA-Guardian | [AVBL-02] Completed: Non-Compliant
+2026-02-09 20:32:51 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-Service W32Time | Select-Object -ExpandProperty Status
+2026-02-09 20:32:51 | INFO     | CIA-Guardian | pwsh not found, falling back to powershell
+2026-02-09 20:32:51 | DEBUG    | CIA-Guardian | Executing PowerShell: Get-Service W32Time | Select-Object -ExpandProperty Status
+2026-02-09 20:32:53 | INFO     | CIA-Guardian | [AVBL-03] Dry run - skipping remediation
+2026-02-09 20:32:53 | INFO     | CIA-Guardian | [AVBL-05] Starting audit: Password Minimum Length
+2026-02-09 20:32:53 | DEBUG    | CIA-Guardian | [AVBL-03] Completed: Non-Compliant
+2026-02-09 20:32:53 | DEBUG    | CIA-Guardian | Executing CMD: net accounts
+2026-02-09 20:32:54 | INFO     | CIA-Guardian | [AVBL-01] Already compliant
+2026-02-09 20:32:54 | INFO     | CIA-Guardian | [AVBL-06] Starting audit: Password Complexity
+2026-02-09 20:32:54 | DEBUG    | CIA-Guardian | [AVBL-01] Completed: Compliant
+2026-02-09 20:32:54 | DEBUG    | CIA-Guardian | Executing CMD: secedit /export /cfg %TEMP%\secpol.cfg /quiet
+2026-02-09 20:32:55 | INFO     | CIA-Guardian | [INTG-07] Dry run - skipping remediation
+2026-02-09 20:32:55 | INFO     | CIA-Guardian | [AVBL-07] Starting audit: Account Lockout Threshold
+2026-02-09 20:32:55 | DEBUG    | CIA-Guardian | [INTG-07] Completed: Non-Compliant
+2026-02-09 20:32:55 | DEBUG    | CIA-Guardian | Executing CMD: net accounts
+2026-02-09 20:32:56 | INFO     | CIA-Guardian | [INTG-01] Already compliant
+2026-02-09 20:32:56 | INFO     | CIA-Guardian | [AVBL-08] Starting audit: Account Lockout Duration
+2026-02-09 20:32:56 | DEBUG    | CIA-Guardian | [INTG-01] Completed: Compliant
+2026-02-09 20:32:56 | DEBUG    | CIA-Guardian | Executing CMD: net accounts
+2026-02-09 20:32:56 | INFO     | CIA-Guardian | [INTG-08] Dry run - skipping remediation
+2026-02-09 20:32:56 | INFO     | CIA-Guardian | [AVBL-09] Starting audit: Password History
+2026-02-09 20:32:56 | DEBUG    | CIA-Guardian | [INTG-08] Completed: Non-Compliant
+2026-02-09 20:32:56 | DEBUG    | CIA-Guardian | Executing CMD: net accounts
+2026-02-09 20:32:56 | ERROR    | CIA-Guardian | [AVBL-06] Audit failed: 
+2026-02-09 20:32:56 | INFO     | CIA-Guardian | [AVBL-10] Starting audit: Password Maximum Age
+2026-02-09 20:32:56 | DEBUG    | CIA-Guardian | [AVBL-06] Completed: Error
+2026-02-09 20:32:56 | DEBUG    | CIA-Guardian | Executing CMD: net accounts
+2026-02-09 20:32:57 | INFO     | CIA-Guardian | [AVBL-08] Dry run - skipping remediation
+2026-02-09 20:32:57 | INFO     | CIA-Guardian | [AVBL-11] Starting audit: Windows Update Service
+2026-02-09 20:32:57 | DEBUG    | CIA-Guardian | [AVBL-08] Completed: Non-Compliant
+2026-02-09 20:32:57 | DEBUG    | CIA-Guardian | Executing CMD: sc query wuauserv
+2026-02-09 20:32:57 | INFO     | CIA-Guardian | [AVBL-09] Dry run - skipping remediation
+2026-02-09 20:32:57 | INFO     | CIA-Guardian | [AVBL-12] Starting audit: Windows Defender Service
+2026-02-09 20:32:57 | DEBUG    | CIA-Guardian | [AVBL-09] Completed: Non-Compliant
+2026-02-09 20:32:57 | DEBUG    | CIA-Guardian | Executing CMD: sc query WinDefend
+2026-02-09 20:32:57 | INFO     | CIA-Guardian | [AVBL-05] Dry run - skipping remediation
+2026-02-09 20:32:57 | INFO     | CIA-Guardian | [AVBL-13] Starting audit: BITS Service
+2026-02-09 20:32:57 | DEBUG    | CIA-Guardian | [AVBL-05] Completed: Non-Compliant
+2026-02-09 20:32:57 | DEBUG    | CIA-Guardian | Executing CMD: sc query BITS
